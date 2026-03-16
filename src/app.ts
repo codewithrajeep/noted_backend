@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { env } from "./config/env";
+import routes from "./routes/index";
 
 const app = express();
 
@@ -14,5 +15,7 @@ app.use(
 app.get("/", (req, res) => {
   res.send("Server is up and running");
 });
+
+app.use("/api", routes);
 
 export default app;
