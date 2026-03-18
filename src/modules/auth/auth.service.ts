@@ -1,8 +1,14 @@
+import { env } from "../../config/env";
 import { AppError } from "../../utils/AppError";
-import { generateAccessToken, generateRefreshToken } from "../../utils/token";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  TokenPayload,
+} from "../../utils/token";
 import { AuthRepository } from "./auth.repository";
 import { LoginInput, RegisterInput } from "./auth.schema";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export const AuthService = {
   register: async (data: RegisterInput) => {
@@ -30,5 +36,20 @@ export const AuthService = {
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
     return { user: safeUser, accessToken, refreshToken };
+  },
+  refresh: async (token: string) => {
+    try {
+      const decoded = jwt.verify(token, env.JWT_REFRESH_SECRET) as TokenPayload;
+      const newAccessToken = generateAccessToken({
+        id: decoded.id,
+        email: decoded.email,
+        username: decoded.username,
+      });
+      return {
+        accessToken: newAccessToken,
+      };
+    } catch (err) {
+      throw new AppError("Invalid refresh token", 401);
+    }
   },
 };
