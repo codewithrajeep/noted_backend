@@ -1,0 +1,37 @@
+import { AppError } from "../../utils/AppError";
+import { TaskRepository } from "./task.repository";
+import { CreateTaskInput, UpdateTaskInput } from "./task.schema";
+
+export const TaskService = {
+  create: async (userId: string, data: CreateTaskInput) => {
+    const task = await TaskRepository.create({
+      ...data,
+      createdBy: {
+        connect: {
+          id: userId,
+        },
+      },
+    });
+    return task;
+  },
+  getAll: async (userId: string) => {
+    const tasks = await TaskRepository.findAll(userId);
+    return tasks;
+  },
+  getById: async (id: string) => {
+    const task = await TaskRepository.findById(id);
+    if (!task) throw new AppError("Task not found", 404);
+    return task;
+  },
+  update: async (id: string, data: UpdateTaskInput) => {
+    const task = await TaskRepository.findById(id);
+    if (!task) throw new AppError("Task not found", 404);
+    const updatedTask = await TaskRepository.update(id, data);
+    return updatedTask;
+  },
+  delete: async (id: string) => {
+    const task = await TaskRepository.findById(id);
+    if (!task) throw new AppError("Task not found", 404);
+    return await TaskRepository.delete(id);
+  },
+};
