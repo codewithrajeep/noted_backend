@@ -1,6 +1,10 @@
 import { AppError } from "../../utils/AppError";
 import { TaskRepository } from "./task.repository";
-import { CreateTaskInput, UpdateTaskInput } from "./task.schema";
+import {
+  CreateTaskInput,
+  TaskQueryInput,
+  UpdateTaskInput,
+} from "./task.schema";
 
 export const TaskService = {
   create: async (userId: string, data: CreateTaskInput) => {
@@ -14,8 +18,8 @@ export const TaskService = {
     });
     return task;
   },
-  getAll: async (userId: string) => {
-    const tasks = await TaskRepository.findAll(userId);
+  getAll: async (userId: string, query: TaskQueryInput) => {
+    const tasks = await TaskRepository.findAll(userId, query);
     return tasks;
   },
   getById: async (id: string) => {
