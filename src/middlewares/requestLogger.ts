@@ -11,7 +11,7 @@ export const requestLogger = (
     const responseTime = Date.now() - start;
     logger.info({
       method: req.method,
-      url: req.url,
+      url: req.originalUrl,
       statusCode: res.statusCode,
       responseTime: `${responseTime}ms`,
       ip: req.ip,
