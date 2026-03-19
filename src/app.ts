@@ -5,6 +5,7 @@ import routes from "./routes/index";
 import { errorHandler } from "./middlewares/errorHandler";
 import { requestLogger } from "./middlewares/requestLogger";
 import helmet from "helmet";
+import { generalLimiter } from "./middlewares/rateLimiter";
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(
   }),
 );
 app.use(requestLogger);
+app.use(generalLimiter);
 app.get("/", (req, res) => {
   res.send("Server is up and running");
 });
