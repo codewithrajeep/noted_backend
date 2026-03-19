@@ -45,9 +45,10 @@ export const TaskController = {
   },
   update: async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const userId = req.user!.id;
       const { taskId } = req.params;
       const body = updateTaskSchema.parse(req.body);
-      const task = await TaskService.update(taskId as string, body);
+      const task = await TaskService.update(userId, taskId as string, body);
       return res.status(200).json({
         success: true,
         message: "Task updated successfully",
@@ -59,8 +60,9 @@ export const TaskController = {
   },
   delete: async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const userId = req.user!.id;
       const { taskId } = req.params;
-      await TaskService.delete(taskId as string);
+      await TaskService.delete(userId, taskId as string);
       return res.status(200).json({
         success: true,
         message: "Task deleted successfully",
