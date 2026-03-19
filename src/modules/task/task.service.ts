@@ -23,15 +23,19 @@ export const TaskService = {
     if (!task) throw new AppError("Task not found", 404);
     return task;
   },
-  update: async (id: string, data: UpdateTaskInput) => {
+  update: async (userId: string, id: string, data: UpdateTaskInput) => {
     const task = await TaskRepository.findById(id);
     if (!task) throw new AppError("Task not found", 404);
+    if (task.createdById !== userId)
+      throw new AppError("You are not authorized to update this task", 403);
     const updatedTask = await TaskRepository.update(id, data);
     return updatedTask;
   },
-  delete: async (id: string) => {
+  delete: async (userId: string, id: string) => {
     const task = await TaskRepository.findById(id);
     if (!task) throw new AppError("Task not found", 404);
+    if (task.createdById !== userId)
+      throw new AppError("You are not authorized to delete this task", 403);
     return await TaskRepository.delete(id);
   },
 };
