@@ -3,6 +3,7 @@ import cors from "cors";
 import { env } from "./config/env";
 import routes from "./routes/index";
 import { errorHandler } from "./middlewares/errorHandler";
+import { requestLogger } from "./middlewares/requestLogger";
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(
     credentials: true,
   }),
 );
+app.use(requestLogger);
 app.get("/", (req, res) => {
   res.send("Server is up and running");
 });
