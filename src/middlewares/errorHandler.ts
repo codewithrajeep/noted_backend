@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { AppError } from "../utils/AppError";
 import { ZodError } from "zod";
+import { env } from "../config/env";
 
 export const errorHandler = (
   err: unknown,
@@ -23,6 +24,9 @@ export const errorHandler = (
   }
   return res.status(500).json({
     success: false,
-    message: "Internal server error.",
+    message:
+      env.NODE_ENV === "development"
+        ? (err as Error).message
+        : "Internal server error.",
   });
 };
