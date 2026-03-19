@@ -1,6 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import { TaskService } from "./task.service";
-import { createTaskSchema, updateTaskSchema } from "./task.schema";
+import {
+  createTaskSchema,
+  TaskQueryInput,
+  taskQuerySchema,
+  updateTaskSchema,
+} from "./task.schema";
 
 export const TaskController = {
   createTask: async (req: Request, res: Response, next: NextFunction) => {
@@ -19,8 +24,9 @@ export const TaskController = {
   },
   getAll: async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const query = taskQuerySchema.parse(req.query);
       const userId = req.user!.id;
-      const tasks = await TaskService.getAll(userId);
+      const tasks = await TaskService.getAll(userId, query);
       return res.status(200).json({
         success: true,
         message: "Tasks fetched successfully",
