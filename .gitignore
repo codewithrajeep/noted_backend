@@ -10,3 +10,6 @@ dist
 
 # Prisma files
 /src/generated/prisma
+
+# docker env
+.env.docker
