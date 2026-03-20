@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json .
 RUN npm install
 COPY . .
-RUN npx prisma generate
+RUN npx prisma generate --schema=prisma/schema.prisma
 RUN npm run build
 
 # Stage 2 - Production
@@ -16,5 +16,7 @@ FROM node:20-alpine AS production
 WORKDIR /app
 COPY --from=builder /app/dist ./dist/
 COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
 EXPOSE 5000
 CMD ["node", "dist/server.js"]
