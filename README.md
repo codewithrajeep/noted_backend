@@ -2,6 +2,7 @@
 
 > A production-grade REST API for a personal task management application built to learn real-world backend engineering.
 
+[![Learning Guide](https://img.shields.io/badge/📖_Learning_Guide-read_now-blue)](LEARNING.md)
 [![CI](https://github.com/codewithrajeep/noted_backend/actions/workflows/ci.yml/badge.svg)](https://github.com/codewithrajeep/noted_backend/actions/workflows/ci.yml)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript)
 ![Node.js](https://img.shields.io/badge/Node.js-20.x-339933?logo=node.js)
@@ -333,6 +334,7 @@ Branch protection rules enforce:
 
 ## Learning Resources
 
+📖 **[Read the full Learning Guide →](LEARNING.md)**
 This project was built step by step as a learning exercise. If you're a beginner wanting to learn backend development, here's what you can learn from this codebase:
 
 ### Concepts Covered
