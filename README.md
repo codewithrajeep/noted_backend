@@ -300,6 +300,8 @@ docker-compose exec app npx prisma migrate deploy
 # Stop containers
 docker-compose down
 ```
+> **Note:** On Render free tier, run migrations manually from your local machine:
+> `DATABASE_URL="your_external_db_url" npx prisma migrate deploy`
 
 ### Services
 - `app` — Node.js backend on port 5000
@@ -326,9 +328,9 @@ See `.github/workflows/ci.yml` for the full workflow.
 The app is deployed on **Render** with auto-deploy on every push to `main` that passes CI.
 
 Branch protection rules enforce:
-- All changes go through Pull Requests
-- CI must pass before merging
-- Force pushes are blocked
+- All features are pushed to `development` branch first
+- CI runs on `development` — if it passes, auto-merges to `main`
+- Render deploys automatically when `main` receives a new commit
 
 ---
 
