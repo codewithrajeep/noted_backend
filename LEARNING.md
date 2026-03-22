@@ -929,6 +929,13 @@ jobs:
       - run: pnpm prisma:generate
       - run: pnpm run build
 ```
+### Branch Strategy
+
+Never push directly to `main`. Use this flow:
+1. Push to `development` branch
+2. CI runs automatically
+3. If CI passes → auto-merges to `main`
+4. Render detects new commit on `main` → deploys automatically
 
 Every push to `main` runs this. If any step fails, the push is flagged.
 

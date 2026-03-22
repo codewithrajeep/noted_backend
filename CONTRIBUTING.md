@@ -72,7 +72,7 @@ git checkout -b fix/your-bug-fix
 1. Make your changes on your feature branch
 2. Test your changes manually using Hoppscotch or Postman
 3. Make sure the project builds without errors: `pnpm run build`
-4. Commit your changes following the [commit convention](#commit-message-convention)
+4. Push to `development` branch — CI will run automatically and merge to `main` if it passes
 5. Push to your fork and open a Pull Request
 
 ---
