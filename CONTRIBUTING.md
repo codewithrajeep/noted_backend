@@ -65,12 +65,26 @@ git checkout -b feat/your-feature-name
 git checkout -b fix/your-bug-fix
 ```
 
+### Useful Scripts
+```bash
+# First time setup
+./scripts/setup.sh
+
+# Clean rebuild (run this if Prisma client issues occur)
+./scripts/fresh-build.sh
+
+# Run migrations against a remote database
+./scripts/migrate.sh your_database_url
+```
+> Run `chmod +x scripts/*.sh` to make scripts executable on Mac/Linux.
+> On Windows use Git Bash to run these scripts.
+
 ---
 
 ## Development Workflow
 
 1. Make your changes on your feature branch
-2. Test your changes manually using Hoppscotch or Postman
+2. Test your changes using Hoppscotch or Postman against `http://localhost:5000/api/v1`
 3. Make sure the project builds without errors: `pnpm run build`
 4. Push to `development` branch — CI will run automatically and merge to `main` if it passes
 5. Push to your fork and open a Pull Request
