@@ -23,7 +23,7 @@ app.get("/", (req, res) => {
   res.send("Server is up and running");
 });
 
-app.use("/api", routes);
+app.use("/api/v1", routes);
 
 app.use(errorHandler);
 
