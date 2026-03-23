@@ -1,8 +1,8 @@
 import z from "zod";
 
 export const createTaskSchema = z.object({
-  title: z.string(),
-  description: z.string().optional(),
+  title: z.string().min(1).max(100).trim(),
+  description: z.string().max(500).trim().optional(),
   status: z.enum(["PENDING", "IN_PROGRESS", "COMPLETED"]).optional(),
   dueDate: z.date().optional(),
   startDate: z.date().optional(),
