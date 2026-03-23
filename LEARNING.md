@@ -681,7 +681,7 @@ Always return `total` so the frontend can calculate total pages.
 ### Filtering and sorting
 
 ```
-GET /api/task?status=PENDING&sortBy=createdAt&order=asc
+GET /apiv1//task?status=PENDING&sortBy=createdAt&order=asc
 ```
 
 Validate query params with Zod:
@@ -695,6 +695,10 @@ const taskQuerySchema = z.object({
   order: z.enum(['asc', 'desc']).optional(),
 })
 ```
+
+### API Versioning
+
+Prefix all routes with `/api/v1/`. This allows breaking changes in future without affecting existing clients — they keep using `/api/v1/` while new clients use `/api/v2/`.
 
 ### Rate limiting
 
@@ -929,6 +933,10 @@ jobs:
       - run: pnpm prisma:generate
       - run: pnpm run build
 ```
+
+# CI Caching
+Dependencies are cached between runs using `actions/cache`. This means the second CI run skips reinstalling packages — significantly faster builds.
+
 ### Branch Strategy
 
 Never push directly to `main`. Use this flow:
