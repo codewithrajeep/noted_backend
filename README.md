@@ -34,33 +34,34 @@
 
 **Noted** is a personal task management application. This repository contains the backend API built with Node.js, Express, and TypeScript designed from scratch following production backend engineering practices.
 
-The project was built with learning in mind. Every decision from folder structure to security patterns was made deliberately, with the goal of understanding *why*, not just *how*.
+The project was built with learning in mind. Every decision from folder structure to security patterns was made deliberately, with the goal of understanding _why_, not just _how_.
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Runtime | Node.js 20 |
-| Language | TypeScript 5 |
-| Framework | Express 5 |
-| ORM | Prisma 7 |
-| Database | PostgreSQL |
-| Validation | Zod 4 |
-| Auth | JWT (access + refresh tokens) |
-| Password Hashing | bcrypt |
-| Logging | Pino |
-| Security | Helmet, express-rate-limit |
-| Package Manager | pnpm |
-| Containerization | Docker + Docker Compose |
-| CI/CD | GitHub Actions + Render |
+| Layer            | Technology                    |
+| ---------------- | ----------------------------- |
+| Runtime          | Node.js 20                    |
+| Language         | TypeScript 5                  |
+| Framework        | Express 5                     |
+| ORM              | Prisma 7                      |
+| Database         | PostgreSQL                    |
+| Validation       | Zod 4                         |
+| Auth             | JWT (access + refresh tokens) |
+| Password Hashing | bcrypt                        |
+| Logging          | Pino                          |
+| Security         | Helmet, express-rate-limit    |
+| Package Manager  | pnpm                          |
+| Containerization | Docker + Docker Compose       |
+| CI/CD            | GitHub Actions + Render       |
 
 ---
 
 ## Features
 
 ### Auth Module
+
 - User registration with Zod-validated input
 - Secure login with identical error messages (prevents user enumeration)
 - JWT access token (15min) + refresh token (7d) with separate secrets
@@ -68,9 +69,11 @@ The project was built with learning in mind. Every decision from folder structur
 - `isAuth` middleware for protected routes
 
 ### User Module
-- `GET /api/user/me` — get authenticated user profile (password excluded)
+
+- `GET /apiv1/user/me` — get authenticated user profile (password excluded)
 
 ### Task Module
+
 - Full CRUD — create, read, update, delete tasks
 - Ownership check — users can only modify their own tasks (403 on violation)
 - Pagination — `?page=1&limit=10`
@@ -78,6 +81,7 @@ The project was built with learning in mind. Every decision from folder structur
 - Sorting — `?sortBy=createdAt&order=desc`
 
 ### API Quality
+
 - Structured JSON logging with Pino (method, url, statusCode, responseTime, ip)
 - HTTP security headers via Helmet
 - Rate limiting 100 req/15min general, 10 req/15min on auth routes
@@ -85,6 +89,7 @@ The project was built with learning in mind. Every decision from folder structur
 - Zod validation on all request bodies and query params
 
 ### DevOps
+
 - Multi-stage Dockerfile (builder + production)
 - Docker Compose with PostgreSQL
 - GitHub Actions CI (build + prisma generate on every push)
@@ -183,6 +188,19 @@ pnpm prisma:studio    # Open Prisma Studio
 pnpm prisma:reset     # Reset database
 ```
 
+### Scripts
+```bash
+# Project setup (first time)
+./scripts/setup.sh
+
+# Clean and rebuild (fixes Prisma generation issues)
+./scripts/fresh-build.sh
+
+# Run migrations against remote database
+./scripts/migrate.sh your_database_url
+```
+> Make them executable first: `chmod +x scripts/*.sh`
+
 ---
 
 ## Environment Variables
@@ -207,22 +225,24 @@ JWT_REFRESH_EXPIRES_IN=7d
 ## API Documentation
 
 ### Base URL
+
 ```
-http://localhost:5000/api        # local
-https://noted-backend-gn0j.onrender.com/api  # production
+http://localhost:5000/api/v1        # local
+https://noted-backend-gn0j.onrender.com/api/v1  # production
 ```
 
 ### Auth
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/auth/register` | ❌ | Register a new user |
-| POST | `/auth/login` | ❌ | Login and get tokens |
-| POST | `/auth/refresh` | ❌ | Refresh access token |
+| Method | Endpoint                | Auth | Description          |
+| ------ | ----------------------- | ---- | -------------------- |
+| POST   | `/api/v1/auth/register` | ❌   | Register a new user  |
+| POST   | `/api/v1/auth/login`    | ❌   | Login and get tokens |
+| POST   | `/api/v1/auth/refresh`  | ❌   | Refresh access token |
 
 #### Register
+
 ```json
-POST /api/auth/register
+POST /api/v1/auth/register
 {
   "username": "rajeep",
   "name": "Rajeep",
@@ -232,8 +252,9 @@ POST /api/auth/register
 ```
 
 #### Login
+
 ```json
-POST /api/auth/login
+POST /api/v1/auth/login
 {
   "email": "rajeep@example.com",
   "password": "secret123"
@@ -241,8 +262,9 @@ POST /api/auth/login
 ```
 
 #### Refresh Token
+
 ```json
-POST /api/auth/refresh
+POST /api/v1/auth/refresh
 {
   "refreshToken": "your_refresh_token"
 }
@@ -250,32 +272,34 @@ POST /api/auth/refresh
 
 ### User
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| GET | `/user/me` | ✅ | Get authenticated user profile |
+| Method | Endpoint          | Auth | Description                    |
+| ------ | ----------------- | ---- | ------------------------------ |
+| GET    | `/api/v1/user/me` | ✅   | Get authenticated user profile |
 
 ### Tasks
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/task` | ✅ | Create a task |
-| GET | `/task` | ✅ | Get all tasks (paginated) |
-| GET | `/task/:taskId` | ✅ | Get task by ID |
-| PATCH | `/task/:taskId` | ✅ | Update task |
-| DELETE | `/task/:taskId` | ✅ | Delete task |
+| Method | Endpoint               | Auth | Description               |
+| ------ | ---------------------- | ---- | ------------------------- |
+| POST   | `/api/v1/task`         | ✅   | Create a task             |
+| GET    | `/api/v1/task`         | ✅   | Get all tasks (paginated) |
+| GET    | `/api/v1/task/:taskId` | ✅   | Get task by ID            |
+| PATCH  | `/api/v1/task/:taskId` | ✅   | Update task               |
+| DELETE | `/api/v1/task/:taskId` | ✅   | Delete task               |
 
 #### Query Parameters for GET /task
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| page | number | 1 | Page number |
-| limit | number | 10 | Items per page |
-| status | string | - | Filter: PENDING, IN_PROGRESS, COMPLETED |
-| sortBy | string | createdAt | Sort field: createdAt, updatedAt |
-| order | string | desc | Sort order: asc, desc |
+| Parameter | Type   | Default   | Description                             |
+| --------- | ------ | --------- | --------------------------------------- |
+| page      | number | 1         | Page number                             |
+| limit     | number | 10        | Items per page                          |
+| status    | string | -         | Filter: PENDING, IN_PROGRESS, COMPLETED |
+| sortBy    | string | createdAt | Sort field: createdAt, updatedAt        |
+| order     | string | desc      | Sort order: asc, desc                   |
 
 #### Authentication
+
 All protected routes require a Bearer token:
+
 ```
 Authorization: Bearer your_access_token
 ```
@@ -300,10 +324,12 @@ docker-compose exec app npx prisma migrate deploy
 # Stop containers
 docker-compose down
 ```
+
 > **Note:** On Render free tier, run migrations manually from your local machine:
 > `DATABASE_URL="your_external_db_url" npx prisma migrate deploy`
 
 ### Services
+
 - `app` — Node.js backend on port 5000
 - `db` — PostgreSQL on port 5432
 
@@ -314,6 +340,7 @@ docker-compose down
 ### GitHub Actions CI
 
 Every push to `main` triggers:
+
 1. Checkout code
 2. Install pnpm
 3. Setup Node.js 20
@@ -328,6 +355,7 @@ See `.github/workflows/ci.yml` for the full workflow.
 The app is deployed on **Render** with auto-deploy on every push to `main` that passes CI.
 
 Branch protection rules enforce:
+
 - All features are pushed to `development` branch first
 - CI runs on `development` — if it passes, auto-merges to `main`
 - Render deploys automatically when `main` receives a new commit
@@ -342,12 +370,14 @@ This project was built step by step as a learning exercise. If you're a beginner
 ### Concepts Covered
 
 **Project Setup**
+
 - TypeScript configuration with `tsconfig.json`
 - Feature-based folder structure (modules)
 - Environment variable validation with Zod
 - pnpm as package manager
 
 **Authentication**
+
 - JWT access + refresh token pattern
 - Why two tokens? Access tokens are short-lived (15min). Refresh tokens renew them without re-login.
 - Why separate secrets? Compromised access token can't forge refresh tokens.
@@ -355,6 +385,7 @@ This project was built step by step as a learning exercise. If you're a beginner
 - Identical error messages for "user not found" vs "wrong password" (prevents user enumeration)
 
 **Database**
+
 - Prisma ORM with PostgreSQL
 - UUID primary keys
 - `snake_case` column mapping with `@@map`
@@ -362,6 +393,7 @@ This project was built step by step as a learning exercise. If you're a beginner
 - `select` to exclude sensitive fields (password never leaves DB layer)
 
 **API Design**
+
 - RESTful route conventions
 - PATCH vs PUT — partial vs full update
 - Pagination with `skip` and `take`
@@ -369,23 +401,27 @@ This project was built step by step as a learning exercise. If you're a beginner
 - Ownership checks (403 Forbidden)
 
 **Error Handling**
+
 - Custom `AppError` class with HTTP status codes
 - Global error handler middleware
 - Zod validation errors (400)
 - Never expose internal errors in production
 
 **Security**
+
 - Helmet for HTTP security headers
 - Rate limiting — general + stricter auth limits
 - CORS configuration
 - Password never returned in responses
 
 **Logging**
+
 - Structured JSON logging with Pino
 - Request logging middleware (method, url, statusCode, responseTime, ip)
 - Environment-based log levels (debug in dev, info in prod)
 
 **DevOps**
+
 - Multi-stage Docker builds (smaller, cleaner images)
 - Docker Compose for local development
 - GitHub Actions CI pipeline
